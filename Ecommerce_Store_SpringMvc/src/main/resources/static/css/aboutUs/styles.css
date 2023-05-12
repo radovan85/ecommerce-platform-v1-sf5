@@ -1,0 +1,281 @@
+/*--------------------------------------------------------------------- File Name: style.css ---------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------- import Fonts ---------------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=latin-ext');
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
+
+/*****---------------------------------------- 1) font-family: 'Rajdhani', sans-serif;
+ 2) font-family: 'Poppins', sans-serif;
+ ----------------------------------------*****/
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+html {
+     scroll-behavior: smooth;
+}
+
+
+  body{
+   margin: 5px;
+   padding: 5px;
+   background: linear-gradient(to right,pink,cornflowerblue);
+  }
+  /* ABOUT US */
+  .choose_text{
+  	width: 100%;
+  	float: left;
+  	text-align: center;
+  	color: #030907;
+  	    font-weight: 600;
+
+  }
+  .about_main{
+  	width: 100%;
+  	float: left;
+      height: auto;
+  	margin-top: 20px;
+  	margin-bottom: 20px;
+  	position: relative;
+    background-color: lightblue;
+    border:2px solid transparent;
+    box-shadow: 0 0 10px #007CDA, 0 0 10px #007CDA, 0 0 10px #007CDA;
+    border-radius: 10px;
+   }
+   .right_section_main{
+   	width: 100%;
+   	float: left;
+   	background-color: lightblue;
+       padding: 0;
+       margin-top: 31px;
+   }
+   .dolar_tetx{
+   	width: 100%;
+   	float: left;
+
+   }
+   #p1::first-letter{
+   	color: royalblue;
+   	font-size:100px;
+		text-align: justify;
+   }
+
+   .images{
+   	margin: 10px;
+   	width: 100%;
+
+   }
+   /* ABOUT ENDS+ */
+
+/*service-section*/
+.service-box{
+	padding: 10px;
+	align-items: center;
+	cursor: pointer;
+
+}
+.service-icon{
+	display: inline-block;
+	width: 70px;
+	height: 70px;
+	margin-bottom: 30px;
+	margin-top: 16px;
+	border-radius: 50px;
+	border:3px solid blue;
+}
+.service-icon i{
+	line-height: 70px;
+	font-size: 26px;
+}
+.service-box:hover .service-icon{
+	background: blue;
+	color: #ddd;
+}
+.service-title{
+	font-style: 18px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+.service-desc{
+	font-size: 14px;
+}
+
+
+h1 {
+     font-size: 48px
+}
+
+h2 {
+     font-size: 22px
+}
+
+h3 {
+     font-size: 18px
+}
+
+h4 {
+     font-size: 16px
+}
+
+h5 {
+     font-size: 14px
+}
+
+h6 {
+     font-size: 13px
+}
+
+
+
+
+
+
+
+p {
+     margin: 20px;
+     font-weight: 600;
+     font-size: 15px;
+     line-height: 24px;
+     color: #110f0a;
+}
+
+a {
+     color: #ffffff;
+     text-decoration: none;
+     outline: none !important;
+}
+
+
+
+.choose_section{
+	width: 100%;
+	float: left;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+
+.lorem_text{
+	width: 100%;
+	float: left;
+	text-align: center;;
+}
+
+
+.choose_section_2{
+	width: 100%;
+	float: left;
+}
+
+
+
+
+
+
+.totaly_text{
+		width: 100%;
+	float: left;
+	text-align: center;
+	margin-top: 20px;
+	color: #000;
+
+
+}
+
+
+.making{
+	width: 100%;
+	float: left;
+	text-align: center;
+	margin-top: 20px;
+	color: #000;
+	margin-left: 0;
+
+}
+
+
+
+
+
+
+
+.about_inner{
+	width: 100%;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+  background-color: lightblue;
+  border:2px solid transparent;
+  box-shadow: 0 0 10px #007CDA, 0 0 10px #007CDA, 0 0 10px #007CDA;
+  border-radius: 10px;
+}
+.dedicated{
+	width: 100%;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+  background-color: lightblue;
+  border:2px solid transparent;
+	box-shadow: 0 0 10px #007CDA, 0 0 10px #007CDA, 0 0 10px #007CDA;
+	border-radius: 10px;
+}
+
+.hosting_text{
+	color: #000;
+	text-align: center;
+	margin-top: 20px;
+
+}
+
+.service-icon{
+	display: inline-block;
+	width: 120px;
+	height: 120px;
+	margin-bottom: 30px;
+	margin-top: 16px;
+	border-radius: 50px;
+	border:3px solid blue;
+  text-align: center;
+}
+.service-icon i{
+	line-height: 120px;
+	font-size: 70px;
+}
+.service-box:hover .service-icon{
+	background: blue;
+	color: #ddd;
+}
+.service-box{
+  text-align: center;
+}
+
+ul{
+	list-style: none;
+}
+
+/*copy right section*/
+.copyright {
+	background: #000;
+	border-radius: 10px;
+	height: auto;
+	padding: 20px 0;
+	text-align: center;
+	padding-bottom: 5px;
+}
+.copyright p{
+	font-size: 18px;
+	color: #fff;
+	word-spacing: 2px;
+	text-transform: capitalize;
+}
+/*responsive*/
+@media only screen and (max-width: 880px){
+	.footer-col{
+		width:100%;
+		margin-bottom:30px;
+    text-align: center;
+	}

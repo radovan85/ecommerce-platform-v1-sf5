@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<head th:replace="fragments/layout :: head"></head>
+
+
+<body style="background-color: #f7fbfb;">
+
+<div th:replace="fragments/layout :: header"></div>
+
+<div class="container">
+<div style="font-family: Oswald, sans-serif; color: rgb(32,1,47);margin-bottom: 100px;">
+        <form method="POST" th:object="${user}" >
+        	<h2 align="center" style="margin-bottom: 50px;margin-top:120px;">Customer Info</h2>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">First Name:</label><input class="border-secondary form-control" type="text" placeholder="Enter First Name" style="height: 35px;width: 500px;" name="firstName">
+            <span th:errors="${user.firstName}" class="text-danger"></span>
+            </div>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end"
+                style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Last Name:</label><input class="border-secondary form-control" type="text" placeholder="Enter Last Name" style="height: 35px;width: 500px;" name="lastName">
+            <span th:errors="${user.lastName}" class="text-danger"></span>   
+            </div>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end"
+                style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Email:</label><input class="border-secondary form-control" type="text" placeholder="Enter Email Address" style="height: 35px;width: 500px;" name="email">
+            <span th:errors="${user.email}" class="text-danger"></span>    
+            </div>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end"
+                style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Password:</label><input class="border-secondary form-control" type="password" placeholder="Enter Password" style="height: 35px;width: 500px;" id="password" name="password">
+             <span th:errors="${user.password}" class="text-danger"></span>   
+            </div>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end"
+                style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Confirm Password:</label><input class="border-secondary form-control" type="password" placeholder="Confirm Password" style="height: 35px;width: 500px;" id="confirmpass" ></div>
+            <div
+                class="text-center" style="margin-top:20px;">
+                <button class="btn btn-primary border-dark"  type="submit" style="background-color: rgb(0,1,1);color: rgb(217,5,18);"  th:onclick="return Validate()" name="_eventId_customerInfoCollected"  th:href="@{${flowExecutionUrl}(_eventId='customerInfoCollected')}" th:onmouseout="this.style='background-color:rgb(0,1,1);color:rgb(217,5,18);'" th:onmouseover="this.style='background-color:rgb(217,5,18);color:rgb(0,1,1);'">
+                Continue</button>
+            </div>
+    </form>
+    </div>
+	</div>
+	
+	<div th:replace="fragments/layout :: footer"></div>
+
+
+<script type="text/javascript">
+function Validate() {
+	var password = document.getElementById("password").value;
+	var confirmpass = document.getElementById("confirmpass").value;
+	if (password != confirmpass) {
+		alert("Password does Not Match.");
+		return false;
+	}
+	return true;
+};
+
+
+
+
+</script>
+</body>
+</html>

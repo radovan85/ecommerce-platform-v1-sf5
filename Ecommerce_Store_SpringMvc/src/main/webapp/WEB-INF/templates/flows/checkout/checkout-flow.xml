@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+						  http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    
+    <var name="order" class="com.radovan.spring.dto.CustomerOrderDto"/>
+    <var name="billingAddress" class="com.radovan.spring.dto.BillingAddressDto" />
+    <var name="shippingAddress" class="com.radovan.spring.dto.ShippingAddressDto" />
+    <var name="customer" class="com.radovan.spring.dto.CustomerDto"/>
+    <var name="user" class="com.radovan.spring.dto.UserDto" />
+    
+    
+    
+    <on-start>
+    <set name="requestScope.cartId" value="requestParameters.cartId" ></set>
+    </on-start>
+    
+    
+    
+    <action-state id="addCartToOrder">
+        <evaluate expression="cartServiceHandler.validateCart(cartId)" result="flowScope.cart" />
+        <transition to="invalidCart" on-exception="com.radovan.spring.exceptions.InvalidCartException" />
+        <transition to="addCustomerToOrder" />
+    </action-state>
+    
+    <action-state id="addCustomerToOrder">
+    <evaluate expression="customerServiceHandler.getCustomerByCartId(cartId)" result="flowScope.customer"/>
+    <transition to="collectCustomerInfo" >
+    <evaluate expression="userServiceHandler.getCurrentUser()" result="flowScope.authUser" />
+    </transition>
+    </action-state>
+      
+ 
+    <view-state id="collectCustomerInfo" view="/flows/checkout/confirm_customer_details" model="user">
+        <transition on="customerInfoCollected" to="updateCustomerDetails">
+        <set name="conversationScope.customer" value="customer" />
+        <set name="conversationScope.userId" value="authUser.id" />
+        </transition>   
+    </view-state>
+    
+    <action-state id="updateCustomerDetails">
+    <evaluate expression="userServiceHandler.updateUser(userId,user)" result="flowScope.authUser" /> 
+    
+    <transition to="collectBillingDetails" >
+    <set name="flowScope.billAddressId" value="customer.billingAddressId" />
+    <evaluate expression="billingAddressServiceHandler.getBillingAddress(billAddressId)" result="flowScope.currentBillingAddress" />
+    </transition>
+    </action-state>
+    
+    <view-state id="collectBillingDetails" view="/flows/checkout/confirm_billing_details" model="billingAddress">
+    <transition on="billingDetailsCollected" to="updateBillingDetails" >
+    <set name="conversationScope.billAddressId" value="billAddressId" />
+    <set name="conversationScope.customer" value="customer" />
+    </transition>
+    <transition on="backToCollectCustomerInfo" to="collectCustomerInfo" validate="false" />
+    </view-state>
+    
+    <action-state id="updateBillingDetails">
+    <evaluate expression="billingAddressServiceHandler.updateBillingAddress(billAddressId,billingAddress)" result="flowScope.currentBillingAddress" />
+    
+    <transition to="collectShippingDetails">
+    <set name="flowScope.shippAddressId" value="customer.shippingAddressId" />
+    <evaluate expression="shippingAddressServiceHandler.getShippingAddress(shippAddressId)" result="flowScope.currentShippingAddress" />
+    </transition>
+    </action-state>
+    
+    <view-state id="collectShippingDetails" view="/flows/checkout/confirm_shipping_details" model="shippingAddress">
+    <transition on="backToCollectBillingDetails" to="collectBillingDetails" validate="false" />
+    <transition on="shippingDetailsCollected" to="updateShippingDetails">
+    <set name="conversationScope.shippAddressId" value="shippAddressId" />
+    <set name="conversationScope.currentCustomer" value="customer" />
+    </transition>
+    </view-state>
+    
+    <action-state id="updateShippingDetails">
+    <evaluate expression="shippingAddressServiceHandler.updateShippingAddress(shippAddressId,shippingAddress)" result="flowScope.currentShippingAddress" />
+    <transition to="collectCustomerPhone" />
+    </action-state>
+    
+    <view-state id="collectCustomerPhone" view="/flows/checkout/confirm_customer_phone" model="customer">
+    <transition on="backToCollectShippingDetails" to="collectShippingDetails" validate="false" />
+    <transition on="customerPhoneCollected" to="updateCustomerPhone">
+    <set name="conversationScope.customerId" value="currentCustomer.customerId"/>
+    </transition>
+    </view-state>
+    
+    <action-state id="updateCustomerPhone">
+    <evaluate expression="customerServiceHandler.updateCustomer(customerId,customer)" result="flowScope.currentCustomer" />
+    <transition to="orderConfirmation">
+    <set name="flowScope.cartId" value="currentCustomer.cartId" />
+    <evaluate expression="itemServiceHandler.listAllByCartId(cartId)" result="flowScope.allCartItems" />
+    <evaluate expression="cartServiceHandler.calculateGrandTotal(cartId)" result="flowScope.grandTotal" />
+    </transition>
+    </action-state>
+    
+    <view-state id="orderConfirmation" view = "/flows/checkout/orderConfirmation"> 
+         <transition on="orderConfirmed" to="executeOrder" validate="false" />
+         <transition on="backToCollectCustomerPhone" to="collectCustomerPhone" validate="false"/>   
+     </view-state> 
+     
+     <action-state id="executeOrder">
+        <evaluate expression="orderServiceHandler.addCustomerOrder()" />
+        <transition to="stockExc" on-exception="com.radovan.spring.exceptions.InsufficientStockException" />
+        <transition to="processOrder" >
+        <set name="cartId" value="customer.cartId" />
+        </transition>
+    </action-state>
+    
+    
+
+    <action-state id="processOrder">
+        <evaluate expression="itemServiceHandler.eraseAllCartItems(cartId)" />
+        <transition to="thankCustomer" />
+    </action-state>
+
+
+    <view-state id="thankCustomer" view="flows/checkout/thankCustomer" >
+        <transition to="endState" />
+    </view-state>
+    
+    <view-state id="cancelCheckout" view="flows/checkout/checkOutCancelled">
+    <transition on="home" to="homePage"></transition>
+    </view-state>
+    
+    <end-state id="invalidCart" view="flows/checkout/invalidCartWarning" />
+    
+    <end-state id="homePage" view="externalRedirect:contextRelative:/index1" />
+    
+    <end-state id="stockExc" view="flows/checkout/stock_exception"></end-state>
+    
+    <global-transitions>
+    <transition on="cancel" to="cancelCheckout" validate="false" />
+    </global-transitions>
+    
+
+</flow>

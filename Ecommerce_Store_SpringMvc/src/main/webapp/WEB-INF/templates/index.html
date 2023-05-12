@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Eccomerce Store</title>
+
+<script
+			  src="https://code.jquery.com/jquery-3.5.1.min.js"
+			  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+			  crossorigin="anonymous"></script>
+			  
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+			  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+<link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rajdhani">
+
+<link rel="stylesheet" th:href="@{/css/navbar.css}" href="../static/css/navbar.css">
+<link rel="stylesheet" th:href="@{/css/carousel/style.css}" href="../static/css//carousel/style.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+
+<body style="background-color: #f7fbfb;">
+<div th:replace = "fragments/layout :: header"></div>
+
+<!-- partial:index.partial.html -->
+<h1>3D Carousel</h1>
+
+<div class="carousel_wrapper">
+  <div class="carousel">
+    <div class="slide one">
+      <img th:src="@{/images/carouselImages/image_01.jpg}" />
+    </div>
+    <div class="slide two">
+      <img th:src="@{/images/carouselImages/image_02.jpg}" />
+    </div>
+    <div class="slide three">
+      <img th:src="@{/images/carouselImages/image_03.jpg}" />
+    </div>
+    <div class="slide four">
+     <img th:src="@{/images/carouselImages/image_04.jpg}" />
+    </div>
+    <div class="slide five">
+      <img th:src="@{/images/carouselImages/image_05.jpg}" />
+    </div>
+    <div class="slide six">
+     <img th:src="@{/images/carouselImages/image_06.jpg}" />
+    </div>
+    <div class="slide seven">
+     <img th:src="@{/images/carouselImages/image_07.jpg}" />
+    </div>
+    <div class="slide eight">
+      <img th:src="@{/images/carouselImages/image_08.jpg}" />
+    </div>
+    <div class="slide nine">
+      <img th:src="@{/images/carouselImages/image_09.jpg}" />
+    </div>
+  </div><!-- / .carousel -->
+</div><!-- / .carousel_wrapper -->
+
+<!--
+SUN IMAGE HERE: https://chivethebrigade.files.wordpress.com/2012/03/sun-920-32.jpg
+-->
+<!-- partial -->
+
+ 
+  
+
+
+
+<div th:replace = "fragments/layout :: footer"></div>
+
+ 
+</body>
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+						  http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+						  
+
+<var name="user" class="com.radovan.spring.dto.UserDto" />
+<var name="customer" class="com.radovan.spring.dto.CustomerDto" />		
+<var name="billingAddress" class="com.radovan.spring.dto.BillingAddressDto" />
+<var name="shippingAddress" class="com.radovan.spring.dto.ShippingAddressDto" />
+	
+<view-state id="getCustomerInfo" view="flows/registration/customer_details" model="user">
+<transition on="customerInfoCollected" to="getBillingDetails" />
+</view-state>
+
+<view-state id="getBillingDetails" view="flows/registration/billing_details" model="billingAddress">
+<transition on="backToCustomerInfo" to="getCustomerInfo" validate="false" />
+<transition on="billingDetailsCollected" to="getShippingDetails"></transition>
+</view-state>	
+
+<view-state id="getShippingDetails" view="flows/registration/shipping_details" model="shippingAddress">
+<transition on="backToBillingDetails" to="getBillingDetails" validate="false" />
+<transition on="shippingDetailsCollected" to="getCustomerPhone"></transition>
+</view-state>
+
+<view-state id="getCustomerPhone" view="flows/registration/customer_phone" model="customer">
+<transition on="backToShippingDetails" to="getShippingDetails" validate="false" />
+<transition on="provideForm" to="createUser"></transition>
+</view-state>
+
+<action-state id="createUser">
+<evaluate expression="userServiceHandler.storeUser(user)" result="flowScope.user" />
+<transition to="registerComplete">
+<evaluate expression="billingAddressServiceHandler.addBillingAddress(billingAddress)" result="flowScope.billingAddress" />
+<evaluate expression="shippingAddressServiceHandler.addShippingAddress(shippingAddress)" result="flowScope.shippingAddress" />
+<evaluate expression="customerServiceHandler.addCustomer(customer,user,billingAddress,shippingAddress)" />
+</transition>
+<transition to="registrationFailed" on-exception="com.radovan.spring.exceptions.ExistingEmailException" />
+</action-state>
+
+<view-state id="registerComplete" view="flows/registration/registration_completed">
+</view-state>
+
+<view-state id="registrationFailed" view="flows/registration/registration_failed">
+<transition on="retry" to="getCustomerInfo"></transition>
+</view-state>
+
+<end-state id="homePage" view="externalRedirect:contextRelative:/index1"></end-state>
+<end-state id="loginPage" view="externalRedirect:contextRelative:/login"></end-state>
+
+<global-transitions>
+<transition on="home" to="homePage" validate="false"></transition>
+<transition on="login" to="loginPage"></transition>
+</global-transitions>				  
+						  
+</flow>

@@ -1,0 +1,65 @@
+* {
+  box-sizing: border-box;
+}
+footer {
+  background: url('https://orange.codeberryschool.com/content/images/project-assets/simple-footer.png') repeat center;
+  display: table;
+  width: 100vw;
+  height: 30px;
+  text-align: center;
+  padding: 1rem;
+  font-family: 'Arial', sans-serif;
+  font-size: .875rem;
+  
+  
+   position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+.wrapper {
+  display: table-cell;
+  vertical-align: middle;
+} 
+footer small {
+  color: #ccc;
+  letter-spacing: .025rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.footer-nav a {
+  text-decoration: none;
+  color: #c74f78;
+  margin: 0 .5rem;
+  display: inline-block;
+}
+.footer-nav a:hover {
+  color: #f26896;
+  transition: color .15s ease-in-out;
+}
+strong {
+  font-weight: 700;
+}
+/*A calc megoldás hogy az oldal aljára tedd a fottert
+HTML
+a footer kivételével minden tartalmat csomagolj be egy konténerbe,
+a footernek adj egy fix magasságot, és
+számítsd ki a tartalom konténerének magasságát úgy, hogy a viewport teljes magasságából levonod a footer magasságát.
+
+<body>
+  <main class="content">
+    <span>content</span>
+  </main>
+  <footer class="footer">
+    <span>footer</span>
+  </footer>
+</body>
+
+CSS
+.content {
+  min-height: calc(100vh - 50px);
+}
+
+.footer {
+  height: 50px;
+}*/

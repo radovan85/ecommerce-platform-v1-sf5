@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+<head th:replace="fragments/layout :: head"></head>
+
+
+<body style="background-color: #f7fbfb;">
+<div th:replace = "fragments/layout :: header"></div>
+
+<div class="container"
+		style="width: 1145px; margin-top: 120px; margin-bottom: 180px;font-family: Oswald, sans-serif; color: rgb(32,1,47);">
+		<div 
+			style="margin-bottom: 30px">
+			<div>
+				<br> <h3>List of Products Purchased</h3>
+				<div style="display: inline-flex;margin-bottom: 50px;">
+					
+					<a class="btn btn-danger pull-left" data-bind = "click: $root.removeAllItems" 
+						style="margin-top: 15px; margin-left: 20px"> <span
+						 class="fas fa-eraser">&nbsp;</span>Clear Cart
+					</a>
+				
+				
+					
+					<a  class="btn btn-danger pull-left" th:onclick="window.location.href='/order/' + cartId; return false"
+						style="margin-top: 15px; margin-left: 20px"> <span
+						 class="far fa-credit-card">&nbsp;</span>Check Out
+					</a>
+				</div>
+				<table class="table table-hover" id="listingTable" data-bind="visible:  CartItems().length>0" style="color: rgb(32,1,47);">
+					<thead>
+						<tr>
+							<th>Product Id</th>
+							<th>Product Name</th>
+							<th>Quantity</th>
+							<th>Price</th>
+							<th>Cart Price</th>
+							
+							
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: CartItems">
+						<tr data-bind="click: $root.getselecteditems">
+							<td><span data-bind="text: productId"></span></td>
+							<td><span data-bind="text: productName"></span>
+							<td><span data-bind="text: quantity"></span></td>
+							<td><span data-bind="numericText: productPrice, precision: 2"></span></td>
+							<td><span data-bind="numericText: price, precision: 2"></span></td>
+							
+							
+							<td><button class="btn btn-danger"  
+								data-bind = "click: $root.deleteRecord"
+								style="margin-top: 0px;">&nbsp;<span
+									 class="fas fa-trash-alt">&nbsp;</span>remove</button></td>
+					</tbody>
+				</table>
+				
+				
+	
+	
+				<h2>Grand Total Price: <span id="grandTotalResponse"></span><span>&nbsp; EUR</span></h2> 
+				
+			</div>
+			
+			<div align="center" style="margin-top: 40px; margin-bottom: 90px;">
+			<a th:href="@{/getAllProducts}" class="btn btn-info" style="margin-left: 20px">Continue
+				Shopping</a>
+			</div>
+		</div>
+	</div>
+	
+	<div th:replace = "fragments/layout :: footer"></div>
+	
+	<script th:src="@{/js/knockout.js}"></script>
+	<script th:src="@{/js/knockout-mapping.js}"></script>
+	
+	
+	
+	
+	<script type="text/javascript">
+	
+	var cartId = "[[${cartId}]]";
+	
+	var grandTotal = document.getElementById("grandTotal");
+	
+	
+	console.log(cartId);
+	//ajaxCall();
+	
+	
+	
+	
+	var CartItemsViewModel = function() {
+		var self = this; 
+		self.cartItemId = ko.observable("0");
+		self.productId = ko.observable(""); 
+		self.productName = ko.observable("");
+		self.quantity = ko.observable("");
+		self.price = ko.observable("");
+		self.cartPrice = ko.observable("");
+		myValue: ko.observable(123.55454);
+	    myPrecision: ko.observable(4);
+		
+		
+		
+		var CartItemData = {
+				cartItemId: self.cartItemId,
+				productId: self.productId,
+				productName:  self.productName,
+				quantity: self.quantity,
+				price: self.price,
+				cartPrice: self.cartPrice,
+				
+				
+		}
+		
+		
+		self.deleteRecord = function(cartItem) {  
+			if (confirm('Are you sure you want to remove item?'))
+	        $.ajax({  
+	            type: "DELETE",  
+	            url: "http://localhost:8080/cart/removeCartItem/" + cartId + "/" + cartItem.cartItemId,
+	            contentType: "application/json; charset=utf-8", 
+	            beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+	            function(){
+	                return confirm("Are you sure?");
+	             },
+	            success: function(data) {  
+	                //alert("Record Deleted Successfully"); 
+	                GetCartItems(); //Refresh the Table  
+	                
+	                
+	                
+	            },  
+	            error: function(error) {  
+	                alert(error.status + "<--and--> " + error.statusText);  
+	            }
+	            
+	        });  
+	    }; 
+	    
+	    
+	    self.removeAllItems = function() {  
+	    	if (confirm('Are you sure you want to clear cart?'))
+	        $.ajax({  
+	            type: "GET",  
+	            url: "http://localhost:8080/cart/removeAllItems/" + cartId,  
+	            contentType: "application/json; charset=utf-8",   
+	            beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+	            success: function(data) {  
+	                 //Put the response in ObservableArray 
+	                
+	                GetCartItems();
+	                
+	            },  
+	            error: function(error) {  
+	                alert(error.status + "<--and--> " + error.statusText);  
+	            } 
+	            
+	        });  
+	        //Ends Here  
+	    };  
+		
+	};
+	
+	
+	
+	
+	self.CartItems = ko.observableArray([]);  
+    GetCartItems();
+    
+    
+    
+    
+    
+    function GetCartItems() {  
+        $.ajax({  
+            type: "GET",  
+            url: "http://localhost:8080/cart/allCartItems/" + cartId,  
+            contentType: "application/json; charset=utf-8",  
+            dataType: "json",  
+            beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+            success: function(data) {  
+            	ajaxCall()
+                .then(result => {
+                	
+                	console.log(result);
+                	
+                	$("#grandTotalResponse").html(result.toFixed(2));
+                	return result.innerHTML;
+                })
+                .catch(err => {
+                	alert("Cart grand total error");
+                });
+                self.CartItems(data); //Put the response in ObservableArray   
+            },  
+            error: function(error) {  
+                alert(error.status + "<--and--> " + error.statusText);  
+            }  
+        });  
+        //Ends Here  
+    }  
+    
+    
+    
+    
+    function ajaxCall(callback){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:8080/cart/getGrandTotal/" + cartId,
+                dataType: 'json',
+                type: 'GET',
+                beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+                contentType: "application/json; charset=utf-8",
+                success: resolve,
+                error: reject
+            });
+        });
+    };
+    
+    
+    function confirmDelete() {
+        if (confirm("Delete Record?") == true) {
+            alert("Now deleting");
+            return true;
+        } else {
+            alert("Cancelled by user");
+            return false;
+        }
+    }
+
+   
+    
+    
+    
+    
+    
+    //Function to Display record to be updated  
+    self.getselecteditems = function(cartItem) {  
+    	self.cartItemId(cartItem.cartItemId),
+        self.productId(cartItem.productId),  
+        self.productName(cartItem.productName),
+        self.quantity(cartItem.quantity),  
+        self.price(cartItem.price),
+        self.cartPrice(cartItem.cartPrice)
+        
+            
+            
+    };  
+    
+    
+    ko.bindingHandlers.numericText = {
+    	    update: function(element, valueAccessor, allBindingsAccessor) {
+    	       var value = ko.utils.unwrapObservable(valueAccessor()),
+    	           precision = ko.utils.unwrapObservable(allBindingsAccessor().precision) || ko.bindingHandlers.numericText.defaultPrecision,
+    	           formattedValue = value.toFixed(precision);
+    	        
+    	        ko.bindingHandlers.text.update(element, function() { return formattedValue; });
+    	    },
+    	    defaultPrecision: 1  
+    	};
+
+    	
+
+    	
+
+ 
+ko.applyBindings(new CartItemsViewModel());
+	</script>
+	
+	
+</body>
+</html>

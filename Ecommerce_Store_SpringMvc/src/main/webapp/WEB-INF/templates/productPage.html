@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+<head th:replace="fragments/layout :: head"></head>
+
+
+<body style="background-color: #f7fbfb;">
+<div th:replace = "fragments/layout :: header"></div>
+
+	
+		<div class="container" style="width: 829px;font-family: Oswald, sans-serif; color: rgb(32,1,47);margin-top: 120px;">
+			<h2>Product Details</h2>
+			<p>Details of the Product</p>
+			<table class="table table-bordered" id="prod" style="margin-top: 100px; margin-bottom: 120px;color: rgb(32,1,47);">
+				<tbody>
+					<tr>
+						<td>Prodcut Image</td>
+						<td><img th:src="@{${productObj.getMainImagePath()}}"
+							width="30%" height="150px" alt="${productObj.productName}" /></td>
+					</tr>
+					<tr>
+						<td>ID</td>
+						<td th:text="${productObj.productId}"></td>
+					</tr>
+					<tr>
+						<td>Name</td>
+						<td th:text="${productObj.productName}"></td>
+					</tr>
+					<tr>
+						<td>Category</td>
+						<td th:text="${productObj.productCategory}"></td>
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td th:text="${productObj.productDescription}"></td>
+					</tr>
+					<tr>
+						<td>Manufacturer</td>
+						<td th:text="${productObj.productManufacturer}"></td>
+					</tr>
+					<tr>
+						<td>Price</td>
+						<td th:text="${productObj.productPrice} % 1 == 0 + ' EUR'? ${productObj.productPrice} :${#numbers.formatDecimal(productObj.productPrice, 0, 2)} + ' EUR'"></td>
+					</tr>
+					<tr>
+						<td>Stock Available</td>
+						<td> 
+						<th:block th:if="${productObj.unitStock} > 0">
+						<span th:text="${productObj.unitStock}"></span>
+						</th:block>
+						
+						<th:block th:if="${productObj.unitStock} == 0">
+						<span class="text-danger">Out Of Stock</span>
+						</th:block>
+						</td>
+					</tr>
+					<tr>
+						<td>Add to Cart:</td>
+						<td>
+							<div>
+									<th:block sec:authorize="hasAuthority('ROLE_USER')">
+									<th:block th:if="${productObj.unitStock} > 0">
+									<button th:onclick="addProduct()"
+										class="btn btn-info"
+										style="margin-top: 0px; width: 150px; float: left; margin-right: 31px;">
+										<span class="fas fa-cart-plus">&nbsp;</span>Add To Cart
+									</button>
+									</th:block>
+									</th:block>
+								
+								<a th:href="@{/getAllProducts}"  class="btn btn-info"
+									style="margin-top: 0px; width: 150px; float: right; margin-right: 31px;">
+									<span class="fas fa-long-arrow-alt-left">&nbsp;</span>All Products
+								</a>
+							</div></td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<th:block sec:authorize="hasAuthority('ROLE_USER')">
+			<div align="center" style="margin-bottom: 90px;margin-top: 50px;">
+				<a class="btn btn-info" th:href="@{/cart/getCartById/{cartId} (cartId = ${cartId})}">Go To Cart<span class="fas fa-shopping-cart"></span></a>
+			</div>
+			</th:block>
+		</div>
+	
+	
+	<div th:replace="fragments/layout :: footer"></div>
+	
+	<script type="text/javascript">
+	
+	var tempProductId = "[[${tempProductId}]]";
+	console.log(tempProductId);
+	
+	function addProduct() {
+		$.ajax({  
+            type: "GET",  
+            url: "http://localhost:8080/cart/add/" + tempProductId,
+            beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+            contentType: "application/json",  
+            success: function(data) {  
+               alert("Added Successfully");
+            },  
+            error: function(error) {  
+                alert(error.status + "<--and--> " + error.statusText);  
+            }  
+        });  
+	}
+	</script>
+</body>
+</html>

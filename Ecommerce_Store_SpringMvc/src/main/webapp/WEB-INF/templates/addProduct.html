@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<head th:replace="fragments/layout :: head"></head>
+
+
+<body style="background-color: #f7fbfb;">
+
+<div th:replace="fragments/layout :: header"></div>
+
+<div class="container">
+<div style="font-family: Oswald, sans-serif; color: rgb(32,1,47);">
+        <form method="POST" th:action="@{/admin/product/addProduct}" th:object="${productFormObj}" enctype="multipart/form-data" style="margin-bottom: 75px">
+        
+        <h2 align="center" style="margin-bottom: 50px;margin-top:120px;">Product Form</h2>
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Product Name:</label><input class="border-secondary form-control" type="text" placeholder="Enter Product Name" style="height: 35px;width: 500px;" name="productName">
+            <span th:errors="${productFormObj.productName}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Description:</label><input class="border-secondary form-control" type="text" placeholder="Enter Description" style="height: 35px;width: 500px;" name="productDescription">
+            <span th:errors="${productFormObj.productDescription}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Product Category:</label>
+            <select class="form-control" name="productCategory"  style="width: 175px;height: 30px;padding-top: 0px;text-indent: 10px;" th:field="*{productCategory}" >h
+           					 	<option value="" >Please Select</option>
+            					<option th:each="tempCategory : ${productFormObj.categoryList}" th:value="${tempCategory}" th:text="${tempCategory}" >
+    							</option>
+        	</select>
+            <span th:errors="${productFormObj.productCategory}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Manufacturer:</label><input class="border-secondary form-control" type="text" placeholder="Enter Product Manufacturer" style="height: 35px;width: 500px;" name="productManufacturer">
+            <span th:errors="${productFormObj.productManufacturer}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Price:</label><input class="border-secondary form-control" type="text" placeholder="Enter Product Price" style="height: 35px;width: 500px;" name="productPrice">
+            <span th:errors="${productFormObj.productPrice}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Number Of Products:</label><input class="border-secondary form-control" type="text" placeholder="Enter Number Of Products" style="height: 35px;width: 500px;" name="unitStock">
+            <span th:errors="${productFormObj.unitStock}" class="text-danger"></span>
+            </div>
+            
+            <div class="text-center d-flex justify-content-sm-start align-items-sm-end" style="margin-bottom: 25px;"><label class="text-right d-inline-block" style="width: 310px;margin-right: 20px;">Browse Image:</label>
+            <input type="file"  name="productImage" accept="image/jpeg, image/png image/jpg"  id="productImage"/>
+    		</div>
+    
+    		<input type="hidden" name="imgName"  th:value="${productFormObj.imageName}">
+    		<div align="center" style="margin-top:50px">
+    		<button type="submit" class="btn btn-info">Submit</button>
+    		</div>
+			</form>
+			
+			
+			</div>
+	</div>
+	
+<div th:replace="fragments/layout :: footer"></div>
+</body>
+</html>
